@@ -28,13 +28,17 @@ async def shutdown():
     await database.disconnect()
 
 @app.get("/dormitory")
+async def get_dormitory():
+    query = "SELECT * FROM dormitory"
+    dormitory = await database.fetch_one(query=query)
+    return dormitory
 async def get_dormitory(dorm_id: int):
     query = "SELECT * FROM dormitory WHERE id = :dorm_id"
-    dormitory = await database.fetch_one(query=query, values={"dorm_id": dorm_id})
-    return dormitory
+    dormitories = await database.fetch_one(query=query, values={"dorm_id": dorm_id})
+    return dormitories
 
 @app.get("/machine")
-async def get_machines(dorm_id: int,type: str):
+async def get_machine(dorm_id: int,type: str):
     if type == "w":
         typeText = "washing_machine"
     elif type == "d":
